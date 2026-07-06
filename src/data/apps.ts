@@ -8,6 +8,7 @@ import facebookIos from "@/assets/icons/ios/facebook.png";
 import youtubeIos from "@/assets/icons/ios/youtube.png";
 import threadsIos from "@/assets/icons/ios/threads.png";
 import discordIos from "@/assets/icons/ios/discord.png";
+import twitchIos from "@/assets/icons/ios/twitch.png";
 
 // Android Play Store icons
 import instagramAndroid from "@/assets/icons/android/instagram.png";
@@ -19,6 +20,7 @@ import facebookAndroid from "@/assets/icons/android/facebook.png";
 import youtubeAndroid from "@/assets/icons/android/youtube.png";
 import threadsAndroid from "@/assets/icons/android/threads.png";
 import discordAndroid from "@/assets/icons/android/discord.png";
+import twitchAndroid from "@/assets/icons/android/twitch.png";
 
 export type Platform = "ios" | "android" | "other";
 
@@ -120,5 +122,14 @@ export const socialApps: SocialApp[] = [
     iconAndroid: discordAndroid,
     color: "#5865F2",
     url: "https://discord.com",
+  },
+  {
+    id: "twitch",
+    name: "Twitch",
+    icon: twitchIos,
+    iconIos: twitchIos,
+    iconAndroid: twitchAndroid,
+    color: "#9146FF",
+    url: "https://www.twitch.tv",
   },
 ];

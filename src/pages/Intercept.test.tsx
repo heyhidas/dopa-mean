@@ -27,6 +27,8 @@ describe("Intercept page", () => {
   it("displays the app name", () => {
     renderIntercept("?app=instagram");
     expect(screen.getByText(/Opening Instagram/)).toBeInTheDocument();
+    renderIntercept("?app=twitch");
+    expect(screen.getByText(/Opening Twitch/)).toBeInTheDocument();
   });
 
   it("starts with 30 second countdown", () => {
