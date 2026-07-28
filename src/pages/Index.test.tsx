@@ -17,19 +17,22 @@ describe("Index page", () => {
     expect(screen.getByText("your time")).toBeInTheDocument();
   });
 
-  it("renders all 9 social apps", () => {
+  it("renders all 10 social apps", () => {
     renderIndex();
     expect(screen.getByText("Instagram")).toBeInTheDocument();
     expect(screen.getByText("TikTok")).toBeInTheDocument();
     expect(screen.getByText("YouTube")).toBeInTheDocument();
     expect(screen.getByText("Reddit")).toBeInTheDocument();
     expect(screen.getByText("LinkedIn")).toBeInTheDocument();
+    expect(screen.getByText("Twitch")).toBeInTheDocument();
   });
 
   it("each app tile links to /app/:id", () => {
     renderIndex();
     const instagramLink = screen.getByText("Instagram").closest("a");
     expect(instagramLink).toHaveAttribute("href", "/app/instagram");
+    const twitchLink = screen.getByText("Twitch").closest("a");
+    expect(twitchLink).toHaveAttribute("href", "/app/twitch");
   });
 
   it("renders the how-it-works steps", () => {

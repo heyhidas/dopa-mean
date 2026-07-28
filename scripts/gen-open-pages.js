@@ -21,6 +21,7 @@ const apps = [
   { id: "threads",   name: "Threads",   color: "#000000" },
   { id: "discord",   name: "Discord",   color: "#5865F2" },
   { id: "linkedin",  name: "LinkedIn",  color: "#0A66C2" },
+  { id: "twitch",    name: "Twitch",    color: "#9146FF" },
 ];
 
 const base = readFileSync(join(distDir, "index.html"), "utf8");

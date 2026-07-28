@@ -2,8 +2,8 @@ import { describe, it, expect } from "vitest";
 import { socialApps, SocialApp } from "./apps";
 
 describe("socialApps", () => {
-  it("exports an array of 9 social apps", () => {
-    expect(socialApps).toHaveLength(9);
+  it("exports an array of 10 social apps", () => {
+    expect(socialApps).toHaveLength(10);
   });
 
   it("each app has required fields", () => {
