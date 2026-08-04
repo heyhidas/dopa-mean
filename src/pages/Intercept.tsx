@@ -113,7 +113,15 @@ const Intercept = () => {
         {/* Countdown ring */}
         <div className="relative w-44 h-44 mb-10 opacity-0 animate-scale-in" style={{ animationDelay: "0.15s" }}>
           <div className="absolute inset-2 rounded-full bg-primary/5 animate-breathe" />
-          <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+          <svg
+            className="w-full h-full -rotate-90"
+            viewBox="0 0 100 100"
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={COUNTDOWN_SECONDS}
+            aria-valuenow={COUNTDOWN_SECONDS - secondsLeft}
+            aria-label="Countdown progress"
+          >
             <circle cx="50" cy="50" r="46" fill="none" stroke="hsl(var(--border))" strokeWidth="2" opacity="0.5" />
             <circle
               cx="50" cy="50" r="46" fill="none"
@@ -123,8 +131,17 @@ const Intercept = () => {
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-5xl font-display font-bold text-foreground leading-none">{secondsLeft}</span>
-            <span className="text-[10px] text-muted-foreground/50 uppercase tracking-widest mt-1 font-body">seconds</span>
+            <span
+              className="text-5xl font-display font-bold text-foreground leading-none"
+              aria-live="polite"
+              aria-atomic="true"
+              aria-label={`${secondsLeft} seconds remaining`}
+            >
+              {secondsLeft}
+            </span>
+            <span className="text-[10px] text-muted-foreground/50 uppercase tracking-widest mt-1 font-body" aria-hidden="true">
+              seconds
+            </span>
           </div>
         </div>
 
@@ -158,11 +175,17 @@ const Intercept = () => {
 };
 
 const DoneActions = ({ app }: { app: SocialApp }) => (
-  <div className="w-full space-y-3 opacity-0 animate-fade-up" style={{ animationDelay: "0s" }}>
+  <div
+    className="w-full space-y-3 opacity-0 animate-fade-up"
+    style={{ animationDelay: "0s" }}
+    role="group"
+    aria-label="After countdown actions"
+  >
     <Button
       variant="outline"
       className="w-full h-12 rounded-xl text-sm border-border/60 font-body hover:bg-card/80 transition-colors"
       onClick={() => window.open(app.url, "_blank")}
+      autoFocus
     >
       Continue to {app.name}
     </Button>
