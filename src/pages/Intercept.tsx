@@ -185,7 +185,6 @@ const DoneActions = ({ app }: { app: SocialApp }) => (
       variant="outline"
       className="w-full h-12 rounded-xl text-sm border-border/60 font-body hover:bg-card/80 transition-colors"
       onClick={() => window.open(app.url, "_blank")}
-      autoFocus
     >
       Continue to {app.name}
     </Button>
