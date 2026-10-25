@@ -1,11 +1,10 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useSearchParams, useParams, Link } from "react-router-dom";
-import { socialApps, SocialApp } from "@/data/apps";
+import { getApp, SocialApp } from "@/data/apps";
 import { useAppIcon, usePlatform } from "@/hooks/usePlatform";
 import { facts } from "@/data/facts";
 import { Button } from "@/components/ui/button";
 import { GITHUB_URL } from "@/data/constants";
-import SupportStrip from "@/components/SupportStrip";
 
 const COUNTDOWN_SECONDS = 30;
 const FACT_INTERVAL_SECONDS = 10;
@@ -18,12 +17,12 @@ const Intercept = () => {
   const [params] = useSearchParams();
   const { appId: pathAppId } = useParams<{ appId: string }>();
   const appId = pathAppId ?? params.get("app");
-  const app = socialApps.find((a) => a.id === appId) ?? socialApps[0];
+  const app = getApp(appId ?? undefined);
   const icon = useAppIcon(app);
   const platform = usePlatform();
 
   // Setup mode: came from within the app (?setup=1), not from a home screen shortcut
-  const isSetupMode = params.get("setup") === "1" && !isStandalone();
+  const isSetupMode = !!app && params.get("setup") === "1" && !isStandalone();
 
   const [secondsLeft, setSecondsLeft] = useState(COUNTDOWN_SECONDS);
   const [done, setDone] = useState(false);
@@ -84,30 +83,19 @@ const Intercept = () => {
   const circumference = 2 * Math.PI * 46;
   const strokeOffset = circumference - (progress / 100) * circumference;
 
-  if (!app) {
-    return (
-      <div className="min-h-screen gradient-intercept grain-overlay flex items-center justify-center px-6">
-        <div className="text-center">
-          <p className="text-xl font-display font-semibold text-foreground">App not found</p>
-          <a href="/" className="text-primary mt-4 inline-block text-sm font-body hover:underline">
-            Go home
-          </a>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen gradient-intercept grain-overlay flex flex-col items-center justify-center px-6">
       <div className="max-w-sm w-full flex flex-col items-center text-center">
 
         {/* App icon */}
-        <div className="mb-3 opacity-0 animate-fade-up animate-drift" style={{ animationDelay: "0.05s" }}>
-          <img src={icon} alt={app.name} className="w-16 h-16 rounded-2xl object-cover shadow-sm" />
-        </div>
+        {app && (
+          <div className="mb-3 opacity-0 animate-fade-up animate-drift" style={{ animationDelay: "0.05s" }}>
+            <img src={icon} alt={app.name} className="w-16 h-16 rounded-2xl object-cover shadow-sm" />
+          </div>
+        )}
 
         <p className="text-sm text-muted-foreground/70 mb-10 font-body font-light opacity-0 animate-fade-up" style={{ animationDelay: "0.1s" }}>
-          {isSetupMode ? `This is what happens when you tap ${app.name}` : `Opening ${app.name}…`}
+          {!app ? "This shortcut isn't set up" : isSetupMode ? `This is what happens when you tap ${app.name}` : `Opening ${app.name}…`}
         </p>
 
         {/* Countdown ring */}
@@ -146,7 +134,7 @@ const Intercept = () => {
         </div>
 
         {/* Body content: facts (returning) vs install guide (setup) */}
-        {isSetupMode ? (
+        {isSetupMode && app ? (
           <SetupGuide app={app} done={done} platform={platform} />
         ) : (
           <>
@@ -174,20 +162,22 @@ const Intercept = () => {
   );
 };
 
-const DoneActions = ({ app }: { app: SocialApp }) => (
+const DoneActions = ({ app }: { app?: SocialApp }) => (
   <div
     className="w-full space-y-3 opacity-0 animate-fade-up"
     style={{ animationDelay: "0s" }}
     role="group"
     aria-label="After countdown actions"
   >
-    <Button
-      variant="outline"
-      className="w-full h-12 rounded-xl text-sm border-border/60 font-body hover:bg-card/80 transition-colors"
-      onClick={() => window.open(app.url, "_blank")}
-    >
-      Continue to {app.name}
-    </Button>
+    {app && (
+      <Button
+        variant="outline"
+        className="w-full h-12 rounded-xl text-sm border-border/60 font-body hover:bg-card/80 transition-colors"
+        onClick={() => window.open(app.url, "_blank")}
+      >
+        Continue to {app.name}
+      </Button>
+    )}
     <Button
       className="w-full h-12 rounded-xl text-sm font-body font-semibold shadow-sm bg-primary text-primary-foreground hover:brightness-110"
       onClick={() => {
@@ -208,7 +198,11 @@ const DoneActions = ({ app }: { app: SocialApp }) => (
     <p className="text-[11px] text-muted-foreground/50 pt-3 font-body">
       You paused. That takes strength. 💛
     </p>
-    <SupportStrip className="pt-4" />
+    {!app && (
+      <Link to="/" className="inline-block text-xs text-primary font-body hover:underline">
+        See available apps
+      </Link>
+    )}
   </div>
 );
 

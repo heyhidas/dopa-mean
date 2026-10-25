@@ -27,31 +27,17 @@ src/assets/icons/android/{appId}.png
 
 Also add a 512×512 icon to `public/icons/{appId}.png` (used in the PWA manifest).
 
-**2. Add the app to the data file**
+**2. Add the app to the registry**
 
-In `src/data/apps.ts`, add an entry to `socialApps`:
+Add one entry to `src/data/registry.json`:
 
-```ts
-{
-  id: "appname",          // lowercase, no spaces
-  name: "App Name",       // display name
-  icon: appnameIos,       // import at top of file
-  iconIos: appnameIos,
-  iconAndroid: appnameAndroid,
-  color: "#HEX",          // brand color (used for theme-color + manifest)
-  url: "https://...",     // the app's web URL (opened after pause)
-}
+```json
+{ "id": "appname", "name": "App Name", "color": "#HEX", "url": "https://..." }
 ```
 
-**3. Add to the build script**
+`id` is lowercase with no spaces, `color` is the brand color (theme-color and manifest), and `url` is the web address opened after the pause. The three PNGs from step 1 are the only other files to add. A test fails if the registry and the icon files disagree.
 
-In `scripts/gen-open-pages.js`, add to the `apps` array:
-
-```js
-{ id: "appname", name: "App Name", color: "#HEX" }
-```
-
-**4. Test it**
+**3. Test it**
 
 ```bash
 npm run dev

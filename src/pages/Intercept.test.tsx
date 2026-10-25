@@ -19,9 +19,22 @@ describe("Intercept page", () => {
     vi.useRealTimers();
   });
 
-  it("shows app not found for invalid app", () => {
-    renderIntercept("?app=nonexistent");
-    expect(screen.getByText("App not found")).toBeInTheDocument();
+  it("runs a safe pause for an unknown shortcut", () => {
+    renderIntercept("?app=linkedin");
+    expect(screen.getByText("This shortcut isn't set up")).toBeInTheDocument();
+    expect(screen.getByText("30")).toBeInTheDocument();
+    expect(document.body.textContent).not.toMatch(/linkedin/i);
+    act(() => { vi.advanceTimersByTime(30000); });
+    expect(screen.queryByText(/Continue to/)).toBeNull();
+    expect(screen.getByText(/I don't need this right now/)).toBeInTheDocument();
+    expect(screen.getByText("See available apps").closest("a")).toHaveAttribute("href", "/");
+  });
+
+  it("does not show the support strip on the done screen", () => {
+    renderIntercept("?app=instagram");
+    act(() => { vi.advanceTimersByTime(30000); });
+    expect(screen.queryByText(/Buy me a coffee/)).toBeNull();
+    expect(screen.queryByText(/Rate on Product Hunt/)).toBeNull();
   });
 
   it("displays the app name", () => {
@@ -58,11 +71,6 @@ describe("Intercept page", () => {
     renderIntercept("?app=instagram");
     act(() => { vi.advanceTimersByTime(30000); });
     expect(screen.getByText(/You paused. That takes strength/)).toBeInTheDocument();
-  });
-
-  it("shows home link on invalid app", () => {
-    renderIntercept("?app=bogus");
-    expect(screen.getByText("Go home")).toBeInTheDocument();
   });
 
   it("resets timer on visibilitychange in standalone mode", () => {

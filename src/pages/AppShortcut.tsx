@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { socialApps } from "@/data/apps";
+import { getApp, SocialApp } from "@/data/apps";
+import NotFound from "./NotFound";
 import { useAppIcon, usePlatform } from "@/hooks/usePlatform";
 import { Button } from "@/components/ui/button";
 import { DOMAIN } from "@/data/constants";
@@ -8,7 +9,11 @@ import { trackInstallation } from "@/lib/supabase";
 
 const AppShortcut = () => {
   const { appId } = useParams<{ appId: string }>();
-  const app = socialApps.find((a) => a.id === appId) ?? socialApps[0];
+  const app = getApp(appId);
+  return app ? <AppShortcutView app={app} /> : <NotFound />;
+};
+
+const AppShortcutView = ({ app }: { app: SocialApp }) => {
   const icon = useAppIcon(app);
   const platform = usePlatform();
   const isAndroid = platform === "android";
