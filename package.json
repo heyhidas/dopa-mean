@@ -10,11 +10,17 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json",
+    "scan:bundle": "node scripts/scan-bundle.js dist",
+    "verify": "npm run lint && npm run typecheck && npm test && npm run build && npm run scan:bundle"
+  },
+  "engines": {
+    "node": ">=22"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
-    "@supabase/supabase-js": "^2.100.0",
+    "@supabase/supabase-js": "^2.118.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "react": "^18.3.1",

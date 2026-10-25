@@ -1,0 +1,12 @@
+[
+  { "id": "instagram", "name": "Instagram", "color": "#E1306C", "url": "https://www.instagram.com" },
+  { "id": "tiktok", "name": "TikTok", "color": "#000000", "url": "https://www.tiktok.com" },
+  { "id": "x", "name": "X", "color": "#000000", "url": "https://x.com" },
+  { "id": "reddit", "name": "Reddit", "color": "#FF4500", "url": "https://www.reddit.com" },
+  { "id": "snapchat", "name": "Snapchat", "color": "#FFFC00", "url": "https://www.snapchat.com" },
+  { "id": "facebook", "name": "Facebook", "color": "#1877F2", "url": "https://www.facebook.com" },
+  { "id": "youtube", "name": "YouTube", "color": "#FF0000", "url": "https://www.youtube.com" },
+  { "id": "threads", "name": "Threads", "color": "#000000", "url": "https://www.threads.com" },
+  { "id": "discord", "name": "Discord", "color": "#5865F2", "url": "https://discord.com" },
+  { "id": "twitch", "name": "Twitch", "color": "#9146FF", "url": "https://www.twitch.tv" }
+]
