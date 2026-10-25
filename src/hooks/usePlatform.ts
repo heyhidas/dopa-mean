@@ -5,8 +5,9 @@ export function usePlatform(): Platform {
   return useMemo(() => detectPlatform(), []);
 }
 
-export function useAppIcon(app: SocialApp): string {
+export function useAppIcon(app: SocialApp | undefined): string | undefined {
   const platform = usePlatform();
+  if (!app) return undefined;
   if (platform === "android") return app.iconAndroid;
   return app.iconIos;
 }

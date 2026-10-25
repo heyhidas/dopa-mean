@@ -30,7 +30,7 @@ Full science: [dopamean.hidas.dev/why](https://dopamean.hidas.dev/why)
 
 Each social media "fake icon" is its own isolated PWA, generated from a single codebase.
 
-The `scripts/gen-open-pages.js` post-build script generates app-specific HTML and manifests:
+The app list lives in `src/data/registry.json`. The `scripts/gen-open-pages.js` post-build script generates app-specific HTML and manifests:
 
 ```json
 // /open/instagram/manifest.json
@@ -47,7 +47,7 @@ The `scripts/gen-open-pages.js` post-build script generates app-specific HTML an
 
 Because each manifest has its own `id` and `scope`, iOS and Android treat them as independent installed apps — each with the correct name, icon, and brand color on the home screen and in the app switcher.
 
-**Supported apps:** Instagram · TikTok · X · Reddit · Snapchat · Facebook · YouTube · Threads · Discord · LinkedIn
+**Supported apps:** Instagram · TikTok · X · Reddit · Snapchat · Facebook · YouTube · Threads · Discord · Twitch
 
 ---
 
@@ -74,7 +74,7 @@ React 18 · TypeScript · Vite · Tailwind CSS · GitHub Pages
 ## Contributing
 
 Good first issues:
-- **Add a new app** — add icons to `src/assets/icons/ios/` and `android/`, add an entry to `src/data/apps.ts` and `scripts/gen-open-pages.js`
+- **Add a new app** — add icons to `src/assets/icons/ios/` and `android/`, add an entry to `src/data/registry.json`
 - **Improve accessibility** — keyboard navigation, ARIA labels on the countdown
 - **Translations** — the facts database (`src/data/facts.ts`) and UI strings
 

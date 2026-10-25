@@ -1,0 +1,19 @@
+{
+  "id": "/open/twitch",
+  "name": "Twitch",
+  "short_name": "Twitch",
+  "description": "Mindful pause before opening Twitch",
+  "start_url": "/open/twitch",
+  "scope": "/open/twitch",
+  "display": "standalone",
+  "background_color": "#9146FF",
+  "theme_color": "#9146FF",
+  "icons": [
+    {
+      "src": "/icons/twitch.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

@@ -24,3 +24,19 @@ dist-ssr
 *.sw?
 content/
 .env
+
+# GSD planning docs (local only)
+.planning/
+
+# Cloudflare analytics exports
+cf-*.json
+# Local AI assistant project guide
+CLAUDE.md
+node_modules.nosync
+
+# Local tool state and env files
+.dev.vars
+.wrangler/
+supabase/.temp/
+supabase/.branches/
+supabase/.env

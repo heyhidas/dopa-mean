@@ -1,0 +1,19 @@
+{
+  "id": "/open/instagram",
+  "name": "Instagram",
+  "short_name": "Instagram",
+  "description": "Mindful pause before opening Instagram",
+  "start_url": "/open/instagram",
+  "scope": "/open/instagram",
+  "display": "standalone",
+  "background_color": "#E1306C",
+  "theme_color": "#E1306C",
+  "icons": [
+    {
+      "src": "/icons/instagram.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

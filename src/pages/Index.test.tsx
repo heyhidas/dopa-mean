@@ -23,7 +23,8 @@ describe("Index page", () => {
     expect(screen.getByText("TikTok")).toBeInTheDocument();
     expect(screen.getByText("YouTube")).toBeInTheDocument();
     expect(screen.getByText("Reddit")).toBeInTheDocument();
-    expect(screen.getByText("LinkedIn")).toBeInTheDocument();
+    expect(screen.queryByText("LinkedIn")).toBeNull();
+    expect(screen.getByText("Discord")).toBeInTheDocument();
     expect(screen.getByText("Twitch")).toBeInTheDocument();
   });
 
@@ -43,6 +44,6 @@ describe("Index page", () => {
 
   it("renders the why-this-works link", () => {
     renderIndex();
-    expect(screen.getByText("Why this works")).toBeInTheDocument();
+    expect(screen.getByText(/Why this works/)).toBeInTheDocument();
   });
 });
