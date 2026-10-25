@@ -1,90 +1,32 @@
 #!/usr/bin/env node
-// Post-build script: generates /open/{appId}/index.html files in dist/
-// by injecting per-app meta tags into the built dist/index.html.
+// Post-build script: writes dist/open/{id}/index.html and manifest.json for
+// every app in src/data/registry.json, and copies dist/index.html to dist/404.html.
 // Run after `vite build`.
 
-import { readFileSync, writeFileSync, mkdirSync } from "fs";
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
+import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { validateApp, renderOpenPage, renderManifest } from "./open-pages.js";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const distDir = join(__dirname, "..", "dist");
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const distDir = join(root, "dist");
 
-const apps = [
-  { id: "instagram", name: "Instagram", color: "#E1306C" },
-  { id: "tiktok",    name: "TikTok",    color: "#000000" },
-  { id: "x",         name: "X",         color: "#000000" },
-  { id: "reddit",    name: "Reddit",    color: "#FF4500" },
-  { id: "snapchat",  name: "Snapchat",  color: "#FFFC00" },
-  { id: "facebook",  name: "Facebook",  color: "#1877F2" },
-  { id: "youtube",   name: "YouTube",   color: "#FF0000" },
-  { id: "threads",   name: "Threads",   color: "#000000" },
-  { id: "discord",   name: "Discord",   color: "#5865F2" },
-  { id: "linkedin",  name: "LinkedIn",  color: "#0A66C2" },
-  { id: "twitch",    name: "Twitch",    color: "#9146FF" },
-];
+try {
+  const base = readFileSync(join(distDir, "index.html"), "utf8");
+  const apps = JSON.parse(readFileSync(join(root, "src", "data", "registry.json"), "utf8"));
 
-const base = readFileSync(join(distDir, "index.html"), "utf8");
-
-for (const app of apps) {
-  // Replace the generic meta tags with per-app values
-  let html = base
-    .replace(
-      /<meta name="apple-mobile-web-app-title" content="[^"]*" \/>/,
-      `<meta name="apple-mobile-web-app-title" content="${app.name}" />`
-    )
-    .replace(
-      /<meta name="theme-color" content="[^"]*" \/>/,
-      `<meta name="theme-color" content="${app.color}" />`
-    )
-    .replace(
-      /<title>[^<]*<\/title>/,
-      `<title>${app.name}</title>`
-    )
-    // Replace generic manifest with per-app manifest
-    .replace(
-      /<link rel="manifest" href="[^"]*" \/>/,
-      `<link rel="manifest" href="/open/${app.id}/manifest.json" />`
-    );
-
-  // Inject apple-touch-icon after <link rel="icon" ...>
-  // (replace existing one if present, or inject after rel="icon")
-  if (html.includes('rel="apple-touch-icon"')) {
-    html = html.replace(
-      /<link rel="apple-touch-icon"[^>]*>/,
-      `<link rel="apple-touch-icon" href="/icons/${app.id}.png" />`
-    );
-  } else {
-    html = html.replace(
-      /(<link rel="icon"[^>]*>)/,
-      `$1\n    <link rel="apple-touch-icon" href="/icons/${app.id}.png" />`
-    );
+  for (const app of apps) {
+    validateApp(app);
+    const html = renderOpenPage(base, app);
+    const outDir = join(distDir, "open", app.id);
+    mkdirSync(outDir, { recursive: true });
+    writeFileSync(join(outDir, "index.html"), html);
+    writeFileSync(join(outDir, "manifest.json"), renderManifest(app));
+    console.log(`✓ dist/open/${app.id}/index.html + manifest.json`);
   }
 
-  const outDir = join(distDir, "open", app.id);
-  mkdirSync(outDir, { recursive: true });
-  writeFileSync(join(outDir, "index.html"), html);
-
-  // Generate per-app manifest.json
-  const manifest = {
-    id: `/open/${app.id}`,
-    name: app.name,
-    short_name: app.name,
-    description: `Mindful pause before opening ${app.name}`,
-    start_url: `/open/${app.id}`,
-    scope: `/open/${app.id}`,
-    display: "standalone",
-    background_color: app.color,
-    theme_color: app.color,
-    icons: [
-      {
-        src: `/icons/${app.id}.png`,
-        sizes: "512x512",
-        type: "image/png",
-        purpose: "any",
-      },
-    ],
-  };
-  writeFileSync(join(outDir, "manifest.json"), JSON.stringify(manifest, null, 2));
-  console.log(`✓ dist/open/${app.id}/index.html + manifest.json`);
+  copyFileSync(join(distDir, "index.html"), join(distDir, "404.html"));
+} catch (err) {
+  console.error(err.message);
+  process.exit(1);
 }
